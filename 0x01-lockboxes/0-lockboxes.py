@@ -11,8 +11,7 @@ def can_unlock_all(boxes):
             if num < boxesLength:
                 keys.add(num)
                 keys.update(boxes[num])
-            if len(keys) == boxesLength-1 or
-            len(keys) == boxesLength:
+            if len(keys) == boxesLength - 1 or len(keys) == boxesLength:
                 return True
         if index not in keys:
             return False
