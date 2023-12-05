@@ -11,7 +11,10 @@ def can_unlock_all(boxes):
             if key < total_boxes:
                 uniquekeys.add(key)
                 uniquekeys.update(boxes[key])
-            if len(uniquekeys) == total_boxes-1 or len(uniquekeys) == total_boxes:
+            if len(uniquekeys) in {total_boxes - 1, total_boxes}:
                 return True
-        if index not in uniquekeys:
-            return False
+    if index not in uniquekeys:
+        return False
+
+
+canUnlockAll = can_unlock_all
