@@ -4,46 +4,42 @@
 
 import sys
 
-# store the count of all status codes in a dictionary
-status_codes_dict = {'200': 0, '301': 0, '400': 0, '401': 0, '403': 0,
-                     '404': 0, '405': 0, '500': 0}
 
-total_size = 0
-count = 0  # keep count of the number lines counted
+def printstdin(date, size):
+    """ print information from stdin """
+    print("File size: {:d}".format(size))
+    for i in sorted(date.keys()):
+        if date[i] != 0:
+            print("{}: {:d}".format(i, date[i]))
+
+
+statusCode = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0,
+              "404": 0, "405": 0, "500": 0}
+
+counter = 0
+size = 0
 
 try:
     for line in sys.stdin:
-        line_list = line.split(" ")
+        if counter != 0 and counter % 10 == 0:
+            printstdin(statusCode, size)
 
-        if len(line_list) > 4:
-            status_code = line_list[-2]
-            file_size = int(line_list[-1])
+        listStatus = line.split()
+        counter += 1
 
-            # check if the status code receive exists in the dictionary and
-            # increment its count
-            if status_code in status_codes_dict.keys():
-                status_codes_dict[status_code] += 1
+        try:
+            size += int(listStatus[-1])
+        except:
+            pass
 
-            # update total size
-            total_size += file_size
+        try:
+            if listStatus[-2] in statusCode:
+                statusCode[listStatus[-2]] += 1
+        except:
+            pass
+    printstdin(statusCode, size)
 
-            # update count of lines
-            count += 1
 
-        if count == 10:
-            count = 0  # reset count
-            print('File size: {}'.format(total_size))
-
-            # print out status code counts
-            for key, value in sorted(status_codes_dict.items()):
-                if value != 0:
-                    print('{}: {}'.format(key, value))
-
-except Exception as err:
-    pass
-
-finally:
-    print('File size: {}'.format(total_size))
-    for key, value in sorted(status_codes_dict.items()):
-        if value != 0:
-            print('{}: {}'.format(key, value))
+except KeyboardInterrupt:
+    printstdin(statusCode, size)
+    raise
